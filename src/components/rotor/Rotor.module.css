@@ -1,0 +1,48 @@
+.rotor {
+    width: 12rem;
+    height: 32rem;
+    background-color: rgb(51, 51, 51);
+    border-radius: 0.5rem;
+    margin: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leftBubbles,
+.rightBubbles {
+    display: flex;
+    gap: 0.1rem;
+    flex-direction: column;
+}
+
+.leftBubbleContainer,
+.rightBubbleContainer {
+    display: flex;
+    align-items: center;
+}
+
+.leftBubbleContainer {
+    position: relative;
+    left: -1.5rem;
+}
+
+.rightBubbleContainer {
+    position: relative;
+    right: -1.5rem;
+}
+
+.bubbleLabel {
+    width: 0.7rem;
+    color: white;
+    font-weight: 300;
+    font-size: 0.8rem;
+}
+
+.bubble {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-color: white;
+    border-radius: 2rem;
+    margin: 0 0.4rem;
+}
