@@ -1,38 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Rotor from "./components/rotor/Rotor";
+import { Rotors } from "./components/rotors/Rotors";
 
-function generateRandomMapping(): number[] {
-    const mapping: number[] = [];
-    let availableIndices = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23, 24, 25,
-    ];
-
-    for (let i = 0; i < 26; i++) {
-        const chosenIndex =
-            availableIndices[
-                Math.floor(Math.random() * availableIndices.length)
-            ];
-        mapping[chosenIndex] = i;
-        availableIndices = availableIndices.filter(
-            (val) => val !== chosenIndex
-        );
-    }
-
-    console.log(mapping);
-
-    return mapping;
+function letterToNumber(letter: string) {
+    return letter.charCodeAt(0) - 97;
 }
 
 function App() {
-    const [rotor1Mapping, setRotor1Mapping] = useState(generateRandomMapping());
-    const [rotor2Mapping, setRotor2Mapping] = useState(generateRandomMapping());
-    const [rotor3Mapping, setRotor3Mapping] = useState(generateRandomMapping());
+    const [step, setState] = useState(0);
+    const [pressedKey, setPressedKey] = useState("");
 
+    function nextStep() {
+        setState((state) => state + 1);
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", (e: KeyboardEvent) => {
+            if (
+                [
+                    "a",
+                    "b",
+                    "c",
+                    "d",
+                    "e",
+                    "f",
+                    "g",
+                    "h",
+                    "i",
+                    "j",
+                    "k",
+                    "l",
+                    "m",
+                    "n",
+                    "o",
+                    "p",
+                    "q",
+                    "r",
+                    "s",
+                    "t",
+                    "u",
+                    "v",
+                    "w",
+                    "x",
+                    "y",
+                    "z",
+                ].includes(e.key)
+            ) {
+                setPressedKey(e.key);
+                nextStep();
+            }
+        });
+    }, []);
     return (
-        <div>
-            <Rotor mapping={rotor1Mapping}></Rotor>
+        <div className="main" onKeyDown={(event) => setPressedKey(event.key)}>
+            <Rotors pressedKey={letterToNumber(pressedKey)} step={step} />
         </div>
     );
 }
