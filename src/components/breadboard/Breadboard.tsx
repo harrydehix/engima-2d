@@ -20,7 +20,7 @@ export default function Breadboard(props: BreadboardProps) {
                             source_index === props.inputLetter || source_index === props.letterFromRotor1 || target_index === props.inputLetter || target_index === props.letterFromRotor1;
 
                         const relationsToRotor1: any[] = [];
-                        if(source_index === props.inputLetter || source_index === props.letterFromRotor1){
+                        if(source_index === props.letterFromRotor1 || source_index === props.mapping[props.inputLetter]){
                             relationsToRotor1.push({sourceAnchor: "top", targetAnchor: "left", targetId: `bubble_left_left_${source_index}_rotor_${1}`, style: {
                                 strokeColor: "white", lineStyle: "curve", endShape: {
                                     arrow: {

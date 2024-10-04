@@ -6,6 +6,7 @@ import { RotorStepSelector } from "../rotorStepSelector/RotorStepSelector";
 import Breadboard from "../breadboard/Breadboard";
 import { ArcherContainer } from "react-archer";
 import Input from "../input/Input";
+import Output from "../output/Output";
 
 function revertMapping(array: number[]) {
     const result = [];
@@ -184,6 +185,7 @@ export default function Enigma(props: RotorsProps) {
             revertMapping(rotor2ActualMapping)[rotor3ToRotor2];
         const rotor1ToBreadboard =
             revertMapping(rotor1ActualMapping)[rotor2ToRotor1];
+        const output = revertMapping(breadboardMapping)[rotor1ToBreadboard];
 
         return {
             rotor1: [breadboardToRotor1, rotor1ToBreadboard],
@@ -194,6 +196,7 @@ export default function Enigma(props: RotorsProps) {
                 inputLetter: props.pressedKey,
                 letterFromRotor1: rotor1ToBreadboard
             },
+            output,
         };
     }, [
         props.pressedKey,
@@ -218,7 +221,7 @@ export default function Enigma(props: RotorsProps) {
             </tr>
             <tr>
                 <td>
-                    <div>Output</div>
+                    <Output outputKey={activeMappings.output} />
                 </td>
                 <td></td>
                 <td>
