@@ -5,6 +5,7 @@ import styles from "./Enigma.module.css";
 import { RotorStepSelector } from "../rotorStepSelector/RotorStepSelector";
 import Breadboard from "../breadboard/Breadboard";
 import { ArcherContainer } from "react-archer";
+import Input from "../input/Input";
 
 function revertMapping(array: number[]) {
     const result = [];
@@ -205,7 +206,10 @@ export default function Enigma(props: RotorsProps) {
                 <td>{/* TODO: Output */}</td>
             </tr>
             <tr>
-                <td>{/* TODO: Input */}</td>
+                <td>
+                    {/* TODO: Input */}
+                    <Input />
+                </td>
                 <td></td>
                 <td>
                     <Rotor
