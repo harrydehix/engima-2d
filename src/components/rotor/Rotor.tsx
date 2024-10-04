@@ -5,28 +5,26 @@ import { useEffect, useMemo } from "react";
 type RotorProps = {
     mapping: number[];
     activeMappings: number[];
+    rotorId: number;
 };
 
 export default function Rotor(props: RotorProps) {
     return (
-        <ArcherContainer
-            className={styles.container}
-            lineStyle="straight"
-            offset={0}
-            endMarker={false}
-        >
             <div className={styles.rotor}>
                 <div className={styles.leftBubbles}>
                     {props.mapping.map((val, index) => (
                         <div key={index} className={styles.leftBubbleContainer}>
+                            <ArcherElement id={`bubble_left_left_${index}_rotor_${props.rotorId}`}>
+                                <div></div>
+                            </ArcherElement>
                             <div className={styles.bubbleLabel}>
                                 {String.fromCharCode(index + 65)}
                             </div>
                             <ArcherElement
-                                id={`bubble_left_${index}`}
+                                id={`bubble_left_${index}_rotor_${props.rotorId}`}
                                 relations={[
                                     {
-                                        targetId: `bubble_right_${val}`,
+                                        targetId: `bubble_right_${val}_rotor_${props.rotorId}`,
                                         targetAnchor: "left",
                                         sourceAnchor: "right",
                                         style: {
@@ -51,7 +49,7 @@ export default function Rotor(props: RotorProps) {
                             key={source_index}
                             className={styles.rightBubbleContainer}
                         >
-                            <ArcherElement id={`bubble_right_${source_index}`}>
+                            <ArcherElement id={`bubble_right_${source_index}_rotor_${props.rotorId}`}>
                                 <div className={styles.bubble}></div>
                             </ArcherElement>
                             <div className={styles.bubbleLabel}>
@@ -74,6 +72,5 @@ export default function Rotor(props: RotorProps) {
                     ))}
                 </div>
             </div>
-        </ArcherContainer>
     );
 }

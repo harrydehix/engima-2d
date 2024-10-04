@@ -190,7 +190,10 @@ export default function Enigma(props: RotorsProps) {
             rotor2: [rotor1ToRotor2, rotor2ToRotor1],
             rotor3: [rotor2ToRotor3, rotor3ToRotor2],
             reflector: [rotor3ToReflector],
-            breadboard: [props.pressedKey, rotor1ToBreadboard],
+            breadboard: {
+                inputLetter: props.pressedKey,
+                letterFromRotor1: rotor1ToBreadboard
+            },
         };
     }, [
         props.pressedKey,
@@ -200,21 +203,29 @@ export default function Enigma(props: RotorsProps) {
     ]);
 
     return (
+        <ArcherContainer lineStyle="straight"
+        endMarker={false}>
         <table className={styles.table}>
             <tr>
                 <td></td>
-                <td>{/* TODO: Output */}</td>
+                <td>
+                    <Input pressedKey={props.pressedKey} />
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <td>
-                    {/* TODO: Input */}
-                    <Input />
+                    <div>Output</div>
                 </td>
                 <td></td>
                 <td>
                     <Rotor
                         mapping={rotor1ActualMapping}
                         activeMappings={activeMappings.rotor1}
+                        rotorId={1}
                     />
                     <RotorStepSelector
                         rotorStep={rotor1Step}
@@ -226,6 +237,7 @@ export default function Enigma(props: RotorsProps) {
                     <Rotor
                         mapping={rotor2ActualMapping}
                         activeMappings={activeMappings.rotor2}
+                        rotorId={2}
                     />
                     <RotorStepSelector
                         rotorStep={rotor2Step}
@@ -237,6 +249,7 @@ export default function Enigma(props: RotorsProps) {
                     <Rotor
                         mapping={rotor3ActualMapping}
                         activeMappings={activeMappings.rotor3}
+                        rotorId={3}
                     />
                     <RotorStepSelector
                         rotorStep={rotor3Step}
@@ -256,10 +269,16 @@ export default function Enigma(props: RotorsProps) {
                 <td>
                     <Breadboard
                         mapping={breadboardMapping}
-                        activeMappings={activeMappings.breadboard}
+                        inputLetter={activeMappings.breadboard.inputLetter}
+                        letterFromRotor1={activeMappings.breadboard.letterFromRotor1}
                     />
                 </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </table>
+        </ArcherContainer>
     );
 }

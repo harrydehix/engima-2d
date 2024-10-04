@@ -1,6 +1,11 @@
 .rotorsContainer {
 }
 
+.table{
+
+}
+
 .table td {
     vertical-align: top;
+    border: 1px solid white;
 }

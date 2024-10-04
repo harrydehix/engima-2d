@@ -1,31 +1,42 @@
 import { ArcherContainer, ArcherElement } from "react-archer";
 import styles from "./Breadboard.module.css";
 import { useEffect, useMemo } from "react";
+import { letterToNumber } from "../../utils/utils";
 
 type BreadboardProps = {
     mapping: number[];
-    activeMappings: number[];
+    inputLetter: number;
+    letterFromRotor1: number;
 };
 
 export default function Breadboard(props: BreadboardProps) {
     console.log(props.mapping);
     return (
-        <ArcherContainer
-            className={styles.container}
-            lineStyle="straight"
-            endMarker={false}
-        >
+        
             <div className={styles.breadboard}>
                 <div className={styles.bubbles}>
                     {props.mapping.map((target_index, source_index) => {
                         const isActiveMapping =
-                            props.activeMappings.includes(source_index) ||
-                            props.activeMappings.includes(target_index);
+                            source_index === props.inputLetter || source_index === props.letterFromRotor1 || target_index === props.inputLetter || target_index === props.letterFromRotor1;
+
+                        const relationsToRotor1: any[] = [];
+                        if(source_index === props.inputLetter || source_index === props.letterFromRotor1){
+                            relationsToRotor1.push({sourceAnchor: "top", targetAnchor: "left", targetId: `bubble_left_left_${source_index}_rotor_${1}`, style: {
+                                strokeColor: "white", lineStyle: "curve", endShape: {
+                                    arrow: {
+                                      arrowLength: 10,
+                                      arrowThickness: 20
+                                    }
+                                  }, }}) // `bubble_left_left_${index}_rotor_${props.rotorId}`
+                        }
                         return (
                             <div
                                 key={source_index}
                                 className={styles.bubbleContainer}
                             >
+                                <ArcherElement id={`breadboard_${source_index}`} relations={relationsToRotor1}>
+                                    <div></div>
+                                </ArcherElement>
                                 <div className={styles.bubbleLabel}>
                                     {String.fromCharCode(source_index + 65)}
                                 </div>
@@ -93,6 +104,5 @@ export default function Breadboard(props: BreadboardProps) {
                     })}
                 </div>
             </div>
-        </ArcherContainer>
     );
 }

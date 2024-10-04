@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Enigma from "./components/enigma/Enigma";
-
-function letterToNumber(letter: string) {
-    return letter.charCodeAt(0) - 97;
-}
+import { letterToNumber } from "./utils/utils";
 
 function App() {
     const [step, setStep] = useState(0);
