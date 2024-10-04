@@ -4,7 +4,6 @@ import Relector from "../reflector/Reflector";
 import styles from "./Enigma.module.css";
 import { RotorStepSelector } from "../rotorStepSelector/RotorStepSelector";
 import Breadboard from "../breadboard/Breadboard";
-import { Empty } from "../empty/Empty";
 import { ArcherContainer } from "react-archer";
 
 function revertMapping(array: number[]) {
@@ -13,6 +12,39 @@ function revertMapping(array: number[]) {
         result[array[i]] = i;
     }
     return result;
+}
+
+function generateBreadboardMapping(): number[] {
+    const mapping: number[] = [];
+    let availableIndices = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23, 24, 25,
+    ];
+
+    // Choose 10 mappings
+    for (let i = 0; i < 10; i++) {
+        let firstIndex =
+            availableIndices[
+                Math.floor(Math.random() * availableIndices.length)
+            ];
+        availableIndices = availableIndices.filter((val) => val !== firstIndex);
+
+        let secondIndex =
+            availableIndices[
+                Math.floor(Math.random() * availableIndices.length)
+            ];
+        availableIndices = availableIndices.filter(
+            (val) => val !== secondIndex
+        );
+
+        mapping[firstIndex] = secondIndex;
+        mapping[secondIndex] = firstIndex;
+    }
+
+    for (let i = 0; i < 26; i++) {
+        if (mapping[i] === undefined) mapping[i] = i;
+    }
+    return mapping;
 }
 
 function generateRandomPairMapping(): number[] {
@@ -92,7 +124,7 @@ function shiftArrayInCircle(array: number[], steps: number): number[] {
 export default function Enigma(props: RotorsProps) {
     // Mappings
     const [breadboardMapping, setBreadboardMapping] = useState(
-        generateRandomPairMapping()
+        generateBreadboardMapping()
     );
     const [rotor1Mapping, setRotor1Mapping] = useState(generateRandomMapping());
     const [rotor1ActualMapping, setRotor1ActualMapping] =
@@ -169,9 +201,12 @@ export default function Enigma(props: RotorsProps) {
     return (
         <table className={styles.table}>
             <tr>
-                <td>
-                    <Empty />
-                </td>
+                <td></td>
+                <td>{/* TODO: Output */}</td>
+            </tr>
+            <tr>
+                <td>{/* TODO: Input */}</td>
+                <td></td>
                 <td>
                     <Rotor
                         mapping={rotor1ActualMapping}
@@ -213,6 +248,7 @@ export default function Enigma(props: RotorsProps) {
                 </td>
             </tr>
             <tr>
+                <td></td>
                 <td>
                     <Breadboard
                         mapping={breadboardMapping}
