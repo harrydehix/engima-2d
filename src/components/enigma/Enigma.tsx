@@ -4,7 +4,8 @@ import Relector from "../reflector/Reflector";
 import styles from "./Enigma.module.css";
 import { RotorStepSelector } from "../rotorStepSelector/RotorStepSelector";
 import Breadboard from "../breadboard/Breadboard";
-import { Matrix } from "../matrix/Matrix";
+import { Empty } from "../empty/Empty";
+import { ArcherContainer } from "react-archer";
 
 function revertMapping(array: number[]) {
     const result = [];
@@ -139,7 +140,7 @@ export default function Enigma(props: RotorsProps) {
 
     // Active paths (turn white)
     const activeMappings = useMemo(() => {
-        const breadboardToRotor1 = props.pressedKey;
+        const breadboardToRotor1 = breadboardMapping[props.pressedKey];
         const rotor1ToRotor2 = rotor1ActualMapping[breadboardToRotor1];
         const rotor2ToRotor3 = rotor2ActualMapping[rotor1ToRotor2];
         const rotor3ToReflector = rotor3ActualMapping[rotor2ToRotor3];
@@ -156,6 +157,7 @@ export default function Enigma(props: RotorsProps) {
             rotor2: [rotor1ToRotor2, rotor2ToRotor1],
             rotor3: [rotor2ToRotor3, rotor3ToRotor2],
             reflector: [rotor3ToReflector],
+            breadboard: [props.pressedKey, rotor1ToBreadboard],
         };
     }, [
         props.pressedKey,
@@ -166,53 +168,58 @@ export default function Enigma(props: RotorsProps) {
 
     return (
         <table className={styles.table}>
-            <td style={{ background: "red" }}>
-                <Matrix
-                    activeInput={props.pressedKey}
-                    activeOutput={3}
-                    activeBreadboardToRotors={[2, 4]}
-                />
-                <Breadboard mapping={breadboardMapping} activeMappings={[]} />
-            </td>
-            <td>
-                <Rotor
-                    mapping={rotor1ActualMapping}
-                    activeMappings={activeMappings.rotor1}
-                />
-                <RotorStepSelector
-                    rotorStep={rotor1Step}
-                    setRotorInitialOffset={setRotor1InitialOffset}
-                    rotorInitialOffset={rotor1InitialOffset}
-                />
-            </td>
-            <td>
-                <Rotor
-                    mapping={rotor2ActualMapping}
-                    activeMappings={activeMappings.rotor2}
-                />
-                <RotorStepSelector
-                    rotorStep={rotor2Step}
-                    setRotorInitialOffset={setRotor2InitialOffset}
-                    rotorInitialOffset={rotor2InitialOffset}
-                />
-            </td>
-            <td>
-                <Rotor
-                    mapping={rotor3ActualMapping}
-                    activeMappings={activeMappings.rotor3}
-                />
-                <RotorStepSelector
-                    rotorStep={rotor3Step}
-                    setRotorInitialOffset={setRotor3InitialOffset}
-                    rotorInitialOffset={rotor3InitialOffset}
-                />
-            </td>
-            <td>
-                <Relector
-                    activeMappings={activeMappings.reflector}
-                    mapping={reflectorMapping}
-                />
-            </td>
+            <tr>
+                <td>
+                    <Empty />
+                </td>
+                <td>
+                    <Rotor
+                        mapping={rotor1ActualMapping}
+                        activeMappings={activeMappings.rotor1}
+                    />
+                    <RotorStepSelector
+                        rotorStep={rotor1Step}
+                        setRotorInitialOffset={setRotor1InitialOffset}
+                        rotorInitialOffset={rotor1InitialOffset}
+                    />
+                </td>
+                <td>
+                    <Rotor
+                        mapping={rotor2ActualMapping}
+                        activeMappings={activeMappings.rotor2}
+                    />
+                    <RotorStepSelector
+                        rotorStep={rotor2Step}
+                        setRotorInitialOffset={setRotor2InitialOffset}
+                        rotorInitialOffset={rotor2InitialOffset}
+                    />
+                </td>
+                <td>
+                    <Rotor
+                        mapping={rotor3ActualMapping}
+                        activeMappings={activeMappings.rotor3}
+                    />
+                    <RotorStepSelector
+                        rotorStep={rotor3Step}
+                        setRotorInitialOffset={setRotor3InitialOffset}
+                        rotorInitialOffset={rotor3InitialOffset}
+                    />
+                </td>
+                <td>
+                    <Relector
+                        activeMappings={activeMappings.reflector}
+                        mapping={reflectorMapping}
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <Breadboard
+                        mapping={breadboardMapping}
+                        activeMappings={activeMappings.breadboard}
+                    />
+                </td>
+            </tr>
         </table>
     );
 }
