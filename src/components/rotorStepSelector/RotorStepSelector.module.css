@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: -1rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(52, 59, 88);
+    font-weight: 500;
+    padding: 0.5rem;
+    width: 3rem;
+}
+
+.leftButton,
+.rightButton {
+    background: rgb(24, 31, 59);
+    border: none;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.leftButton {
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.rightButton {
+    border-radius: 0 0.5rem 0.5rem 0;
+}

@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Rotor from "../rotor/Rotor";
 import Relector from "../reflector/Reflector";
-import styles from "./Rotors.module.css";
+import styles from "./Enigma.module.css";
+import { RotorStepSelector } from "../rotorStepSelector/RotorStepSelector";
+import Breadboard from "../breadboard/Breadboard";
+import { Matrix } from "../matrix/Matrix";
 
 function revertMapping(array: number[]) {
     const result = [];
@@ -68,18 +71,28 @@ function shiftArrayInCircle(array: number[], steps: number): number[] {
     const arrayCopy: number[] = [];
     for (let i = 0; i < array.length; i++) arrayCopy[i] = array[i];
 
+    steps = steps % array.length;
     for (let i = 0; i < array.length; i++) {
-        const oldIndex = (i + steps) % array.length;
-        const shift = -oldIndex + i;
-        arrayCopy[i] = (array[oldIndex] + shift) % array.length;
+        let sourceIndex = (i - steps) % array.length;
+        if (sourceIndex < 0) {
+            sourceIndex = array.length + sourceIndex;
+        }
+
+        const shift = -sourceIndex + i;
+        arrayCopy[i] = (array[sourceIndex] + shift) % array.length;
         if (arrayCopy[i] < 0) {
             arrayCopy[i] = array.length + arrayCopy[i];
         }
     }
+    console.log(`Steps: ${steps} => ${arrayCopy}`);
     return arrayCopy;
 }
 
-export function Rotors(props: RotorsProps) {
+export default function Enigma(props: RotorsProps) {
+    // Mappings
+    const [breadboardMapping, setBreadboardMapping] = useState(
+        generateRandomPairMapping()
+    );
     const [rotor1Mapping, setRotor1Mapping] = useState(generateRandomMapping());
     const [rotor1ActualMapping, setRotor1ActualMapping] =
         useState(rotor1Mapping);
@@ -93,22 +106,38 @@ export function Rotors(props: RotorsProps) {
         generateRandomPairMapping()
     );
 
+    // Initial offset (configuration)
+    const [rotor1InitialOffset, setRotor1InitialOffset] = useState(0);
+    const [rotor2InitialOffset, setRotor2InitialOffset] = useState(0);
+    const [rotor3InitialOffset, setRotor3InitialOffset] = useState(0);
+
+    // Current simulated step
     const rotor1Step = useMemo(() => {
-        const step = props.step % 26;
+        const step = (props.step + rotor1InitialOffset) % 26;
         setRotor1ActualMapping(shiftArrayInCircle(rotor1Mapping, step));
         return step;
-    }, [props.step]);
+    }, [props.step, rotor1InitialOffset]);
     const rotor2Step = useMemo(() => {
-        const step = Math.floor(props.step / 26) % 26;
+        const step =
+            (Math.floor((props.step + rotor1InitialOffset) / 26) +
+                rotor2InitialOffset) %
+            26;
         setRotor2ActualMapping(shiftArrayInCircle(rotor2Mapping, step));
         return step;
-    }, [props.step]);
+    }, [props.step, rotor2InitialOffset]);
     const rotor3Step = useMemo(() => {
-        const step = Math.floor(props.step / 26 ** 2) % 26;
+        const step =
+            (Math.floor(
+                (props.step + rotor1InitialOffset + 26 * rotor2InitialOffset) /
+                    26 ** 2
+            ) +
+                rotor3InitialOffset) %
+            26;
         setRotor3ActualMapping(shiftArrayInCircle(rotor3Mapping, step));
         return step;
-    }, [props.step]);
+    }, [props.step, rotor3InitialOffset]);
 
+    // Active paths (turn white)
     const activeMappings = useMemo(() => {
         const breadboardToRotor1 = props.pressedKey;
         const rotor1ToRotor2 = rotor1ActualMapping[breadboardToRotor1];
@@ -136,11 +165,24 @@ export function Rotors(props: RotorsProps) {
     ]);
 
     return (
-        <table>
+        <table className={styles.table}>
+            <td style={{ background: "red" }}>
+                <Matrix
+                    activeInput={props.pressedKey}
+                    activeOutput={3}
+                    activeBreadboardToRotors={[2, 4]}
+                />
+                <Breadboard mapping={breadboardMapping} activeMappings={[]} />
+            </td>
             <td>
                 <Rotor
                     mapping={rotor1ActualMapping}
                     activeMappings={activeMappings.rotor1}
+                />
+                <RotorStepSelector
+                    rotorStep={rotor1Step}
+                    setRotorInitialOffset={setRotor1InitialOffset}
+                    rotorInitialOffset={rotor1InitialOffset}
                 />
             </td>
             <td>
@@ -148,11 +190,21 @@ export function Rotors(props: RotorsProps) {
                     mapping={rotor2ActualMapping}
                     activeMappings={activeMappings.rotor2}
                 />
+                <RotorStepSelector
+                    rotorStep={rotor2Step}
+                    setRotorInitialOffset={setRotor2InitialOffset}
+                    rotorInitialOffset={rotor2InitialOffset}
+                />
             </td>
             <td>
                 <Rotor
                     mapping={rotor3ActualMapping}
                     activeMappings={activeMappings.rotor3}
+                />
+                <RotorStepSelector
+                    rotorStep={rotor3Step}
+                    setRotorInitialOffset={setRotor3InitialOffset}
+                    rotorInitialOffset={rotor3InitialOffset}
                 />
             </td>
             <td>

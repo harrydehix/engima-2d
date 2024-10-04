@@ -2,8 +2,8 @@
 }
 
 .rotor {
-    width: 12rem;
-    height: 32rem;
+    width: 8rem;
+    height: 28rem;
     background-color: rgb(51, 51, 51);
     border-radius: 0.5rem;
     margin: 3rem;
@@ -15,7 +15,7 @@
 .leftBubbles,
 .rightBubbles {
     display: flex;
-    gap: 0.1rem;
+    gap: 0rem;
     flex-direction: column;
 }
 
@@ -27,12 +27,12 @@
 
 .leftBubbleContainer {
     position: relative;
-    left: -1.5rem;
+    left: -1.3rem;
 }
 
 .rightBubbleContainer {
     position: relative;
-    right: -1.5rem;
+    right: -1.3rem;
 }
 
 .bubbleLabel {
@@ -43,8 +43,8 @@
 }
 
 .bubble {
-    width: 0.8rem;
-    height: 0.8rem;
+    width: 0.5rem;
+    height: 0.5rem;
     background-color: white;
     border-radius: 2rem;
     margin: 0 0.4rem;

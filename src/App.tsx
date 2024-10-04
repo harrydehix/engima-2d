@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import Rotor from "./components/rotor/Rotor";
-import { Rotors } from "./components/rotors/Rotors";
+import Enigma from "./components/enigma/Enigma";
 
 function letterToNumber(letter: string) {
     return letter.charCodeAt(0) - 97;
 }
 
 function App() {
-    const [step, setState] = useState(0);
+    const [step, setStep] = useState(0);
     const [pressedKey, setPressedKey] = useState("");
 
     function nextStep() {
-        setState((state) => state + 1);
+        setStep((step) => step + 1);
     }
 
     useEffect(() => {
@@ -47,6 +46,7 @@ function App() {
                     "z",
                 ].includes(e.key)
             ) {
+                console.log("Pressed key!");
                 setPressedKey(e.key);
                 nextStep();
             }
@@ -54,7 +54,7 @@ function App() {
     }, []);
     return (
         <div className="main" onKeyDown={(event) => setPressedKey(event.key)}>
-            <Rotors pressedKey={letterToNumber(pressedKey)} step={step} />
+            <Enigma pressedKey={letterToNumber(pressedKey)} step={step} />
         </div>
     );
 }
